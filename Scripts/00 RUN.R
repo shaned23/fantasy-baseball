@@ -1,33 +1,6 @@
-#### SET ENVIRONMENT #####
 
-# packages that are needed. 
-libs <- c("tidyverse", "DBI", "RPostgreSQL", "glue","openxlsx",'clipr','knitr','flextable','assertr','scales'
-          ,'randomForest','rpart', 'googlesheets4')
-
-# install and load needed packages
-lapply(libs, function(x){
-  if(!(x %in% installed.packages())) install.packages(x)
-})
-lapply(libs,library, character.only = TRUE)
-
-# Clear environment
-rm(list = ls())
-
-# Set links
-.scripts <- paste0(dirname(rstudioapi::getActiveDocumentContext()$path),'/')
-.dd <- str_replace(.scripts,'Scripts/','')
-.output <- str_replace(.scripts,'Scripts','Output')
-.data <- str_replace(.scripts,'Scripts','Data')
-  .nfbc <- paste0(.data,'NFBC standings/')
-  .rp <- paste0(.data,'Relievers/')
-.proj <- str_replace(.scripts,'Scripts','Projections')
-wd <- setwd(.dd)
-getwd()
 
 # Run scripts
-
-## Functions
-source(paste0(.scripts,'rfrsq.R'))
 
 ## References
 source(paste0(.scripts,'Clean references.R'))
@@ -70,17 +43,17 @@ source(paste0(.scripts,'02d Mendoza value.R'))
 source(paste0(.scripts,'03d Reliever sheet.R'))
 
 ## HC Baseballers
-# cats <- c('r','hr','rbi','sb','avg','ops','qs','k','svhld','era','hip','bb9')
-# hit.cats <- c('r','hr','rbi','sb','avg','ops')
-# pitch.cats <- c('qs','k','svhld','era','hip','bb9')
-# hitlist.count <- c('r','hr','rbi','sb')
-# pitlist.count <- c('qs','k','svhld')
-# hc.book = '1MCDdhMBssWlwEvLeR0FEnjmYZpcenSbliGd_lT0eOVA'
-# source(paste0(.scripts,'01e HC Last year results.R'))
-# source(paste0(.scripts,'02e HC logistic regressions.R'))
-# source(paste0(.scripts,'03e HC prep.R'))
-# source(paste0(.scripts,'04e HC WAR.R'))
-# source(paste0(.scripts,'05e HC export.R'))
+cats <- c('r','hr','rbi','sb','avg','ops','qs','k','svhld','era','hip','bb9')
+hit.cats <- c('r','hr','rbi','sb','avg','ops')
+pitch.cats <- c('qs','k','svhld','era','hip','bb9')
+hitlist.count <- c('r','hr','rbi','sb')
+pitlist.count <- c('qs','k','svhld')
+hc.book = '1MCDdhMBssWlwEvLeR0FEnjmYZpcenSbliGd_lT0eOVA'
+source(paste0(.scripts,'01e HC Last year results.R'))
+source(paste0(.scripts,'02e HC logistic regressions.R'))
+source(paste0(.scripts,'03e HC prep.R'))
+source(paste0(.scripts,'04e HC WAR.R'))
+source(paste0(.scripts,'05e HC export.R'))
 
 #source(paste0(.scripts,'01e winslogit.R'))
 
