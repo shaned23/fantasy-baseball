@@ -1,9 +1,6 @@
 
-# Load team wins
-wins.proj <- read.xlsx(paste0(.data,'proj2024wins.xlsx'), sheet = 'load')
-
 # Load positions
-pos.load <- read_csv(paste0(.data,'positions_mlb.csv')) %>%
+pos.load <- read_csv(paste0(.data,'/positions_mlb.csv')) %>%
   rename_with(tolower) %>%
   rename(fg.id = playerid) %>%
   select(fg.id,pos,g,gs) %>%
@@ -17,7 +14,7 @@ pos.load <- read_csv(paste0(.data,'positions_mlb.csv')) %>%
          , gs = if_else(gs > 162,162,gs))
   
 # Load other positions
-other.raw <- read_csv(paste0(.data,'positions_ac.csv')) %>%
+other.raw <- read_csv(paste0(.data,'/positions_ac.csv')) %>%
   rename_with(tolower) %>%
   rename(fg.id = playerid
          , pos2 = pos) %>%
@@ -33,16 +30,15 @@ other.positions <- other.raw %>%
   filter(!is.na(pos2) & pos2 != 'DH')
 
 # Pitcher positions
-pitch.positions <- read.csv(paste0(.data,'savesandholds.csv')) %>%
+pitch.positions <- read.csv(paste0(.data,'/savesandholds.csv')) %>%
   rename_with(tolower) %>%
-  filter(season == 2023) %>%
   rename(fg.id = playerid) %>%
   mutate(sp.apps = gs
         , rp.apps = g - gs) %>%
   select(fg.id,sp.apps,rp.apps)
 
 # Load other pitching positions
-pitch.other.positions <- read_csv(paste0(.data,'positions_pitch.csv')) %>%
+pitch.other.positions <- read_csv(paste0(.data,'/positions_pitch.csv')) %>%
   rename_with(tolower) %>%
   rename(fg.id = playerid
          , pos2 = pos) %>%
@@ -66,19 +62,20 @@ positions <- pos.load %>%
   mutate(fg.id = as.character(fg.id))
 
 # FG ID to ottoneu ID
-fg.on.xwalk <- read_csv(paste0(.data,'player_universe.csv')) %>%
+fg.on.xwalk <- read_csv(paste0(.data,'/player_universe.csv')) %>%
   rename_with(tolower) %>%
   rename_with(~str_replace_all(.x,' ','.')) %>%
   mutate(fg.id = coalesce(as.character(fg.id),fg.minor.id)) %>%
-  bind_rows(read_csv(paste0(.data,'extraplayers.csv')))
+  bind_rows(read_csv(paste0(.data,'/extraplayers.csv')
+                     , col_types = 'ccn'))
 
 # Player map
-extra.playerid <- read.csv(paste0(.data,'idsupplemental.csv'))
+extra.playerid <- read.csv(paste0(.data,'/idsupplemental.csv'))
 
 download.file('https://www.smartfantasybaseball.com/PLAYERIDMAPCSV'
-              , destfile = paste0(.data,'playeridmap.csv'))
+              , destfile = paste0(.data,'/playeridmap.csv'))
 
-playerid.map <- read.csv(paste0(.data,'playeridmap.csv')) %>%
+playerid.map <- read.csv(paste0(.data,'/playeridmap.csv')) %>%
   rename_with(tolower) %>%
   rename(fg.id = idfangraphs
          , nfbc.id = nfbcid
@@ -95,4 +92,4 @@ pos.sort <- tibble(
   mutate(sorter = row_number())
 
 # Pitch ref
-pitch.ref <- read_csv(paste0(.rp, 'pitch_ref.csv'))
+pitch.ref <- read_csv(paste0(.rp, '/pitch_ref.csv'))

@@ -154,6 +154,9 @@ mendoza.values <- function(teams = 30
     hit.values
     , pitch.values
   ) %>%
+    mutate(best.pos = if_else(fg.id == '19755', 'Util/SP', best.pos)) %>%
+    group_by(fg.id, name, best.pos) %>%
+    summarise(value = sum(value, na.rm = TRUE), .groups = 'drop') %>%
     select(fg.id,name,value,best.pos) %>%
     left_join(mend.widepos, by = 'fg.id') %>%
     left_join(distinct(other.raw,pos2,fg.id), by = 'fg.id') %>%
@@ -163,6 +166,7 @@ mendoza.values <- function(teams = 30
     mutate(pos = if_else(is.na(pos),pos2,pos)) %>%
     select(-pos2) %>%
     mutate(pos = if_else(is.na(pos),best.pos,pos)) %>%
+    mutate(pos = if_else(fg.id == '19755', 'Util/SP', pos)) %>%
     filter(!is.na(value)) %>%
     verify(!is.na(pos)) %>%
     select(fg.id,name,pos,value) %>%
@@ -172,28 +176,4 @@ mendoza.values <- function(teams = 30
   return(output.values)
   
 }
-
-    link = 'https://docs.google.com/spreadsheets/d/1GFZTsccSIEr0yqVdE6md8hrUxj9FpalBlePv0NkBuqE/'
-  
-    # Split should be close to 0.54
-  out <-  mendoza.values(teams = 30, rp.nerf = 0.65, bat.split = .54) %>%
-    select(fg.id, name, pos, value) %>%
-    left_join(distinct(playerid.map,fg.id,fantrax.id) %>% filter(fantrax.id != ''), by = 'fg.id') %>%
-    rename(Name = name
-           , Position = pos
-           , Dollars = value
-           , fantrax.id = fantrax.id) %>%
-      select(fantrax.id,Name,Position,Dollars,fg.id) %>%
-      filter(fantrax.id != '*06als*' | is.na(fantrax.id)) %>%
-    mutate(fantrax.id = case_when(
-      fg.id == '13770' ~ '*02mzf*'
-      , fg.id == '17170' ~ '*031fj*'
-      , fg.id == '26203' ~ '*0514i*'
-      , fg.id == '17871' ~ '*03qpg*'
-      , fg.id == '13346' ~ '*02n0v*'
-      , TRUE ~ fantrax.id
-    ))
-  
-  googlesheets4::write_sheet(out,link,'Shane Projections')
-  #googlesheets4::write_sheet(read_csv(paste0(.data,'Fantrax-Players-The Mendoza League (1).csv')),link,'2024 Current Rosters')
 

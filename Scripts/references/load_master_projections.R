@@ -1,9 +1,9 @@
 
 # Load projections
-hit.raw <- read.xlsx(paste0(.proj,'masterprojections.xlsx'),sheet = 'Hitters-Master')
-pitch.raw <- read.xlsx(paste0(.proj,'masterprojections.xlsx'),sheet = 'Pitchers-Master')
-hit.450.raw <- read.xlsx(paste0(.proj,'masterprojections.xlsx'),sheet = 'Hitters-450')
-pitch.120.raw <- read.xlsx(paste0(.proj,'masterprojections.xlsx'),sheet = 'Pitchers-120')
+hit.raw <- read.xlsx(paste0(.proj,'/masterprojections.xlsx'),sheet = 'Hitters-Master')
+pitch.raw <- read.xlsx(paste0(.proj,'/masterprojections.xlsx'),sheet = 'Pitchers-Master')
+hit.450.raw <- read.xlsx(paste0(.proj,'/masterprojections.xlsx'),sheet = 'Hitters-450')
+pitch.120.raw <- read.xlsx(paste0(.proj,'/masterprojections.xlsx'),sheet = 'Pitchers-120')
 
 # Clean data
 sides <- list('hit','pitch','hit.450','pitch.120')
