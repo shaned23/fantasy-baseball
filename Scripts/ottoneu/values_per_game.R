@@ -1,4 +1,4 @@
-teams = 20
+teams = 12
 games = 162
 rp.nerf = 0.67
 ip.limit = 1500
@@ -189,11 +189,20 @@ ottoneu.values <- function(teams
     select(fg.id,name,best.pos,ip,total.pts,pts.per.ip,value)
   
   output.values <- bind_rows(
-    hit.values
-    , pitch.values
-  ) %>%
-  mutate(`g/ip` = coalesce(g,ip)
-         , `ppg/ip` = coalesce(pts.per.g,pts.per.ip)) %>%
+      hit.values
+      , pitch.values
+    ) %>%
+    group_by(fg.id,name) %>%
+    mutate(instances = n()
+           , best.pos = if_else(fg.id == '19755', 'Util/P', best.pos)) %>%
+    ungroup() %>%
+    group_by(fg.id,name,best.pos) %>%
+    summarise(across(c(value, g, ip, pts.per.g, pts.per.ip, total.pts), ~sum(., na.rm = TRUE))
+              , instances = mean(instances)
+              , value = value + instances - 1
+              , .groups = 'drop') %>% 
+    mutate(`g/ip` = if_else(g > 0, g, ip)
+           , `ppg/ip` = if_else(pts.per.g > 0, pts.per.g, pts.per.ip)) %>%
     select(fg.id,name,value,best.pos, total.pts, `g/ip`, `ppg/ip`) %>%
     left_join(on.widepos, by = 'fg.id') %>%
     left_join(distinct(other.raw,pos2,fg.id), by = 'fg.id') %>%
@@ -202,9 +211,7 @@ ottoneu.values <- function(teams
     left_join(pitch.other.positions,by = 'fg.id') %>%
     mutate(pos = if_else(is.na(pos),pos2,pos)) %>%
     select(-pos2) %>%
-    mutate(pos = if_else(is.na(pos),best.pos,pos)
-           , pos = if_else(fg.id == '19755', 'Util', pos)
-           ) %>%
+    mutate(pos = if_else(is.na(pos),best.pos,pos)) %>%
     filter(!is.na(value)) %>%
     verify(!is.na(pos)) %>%
     left_join(select(fg.on.xwalk,fg.id,ottoneu.id), by = 'fg.id') %>%
@@ -214,31 +221,3 @@ ottoneu.values <- function(teams
   return(output.values)
     
 }
-
-ottoneu12 <- ottoneu.values(teams = 12, bat.split = 0.67)
-ottoneu20 <- ottoneu.values(teams = 20, bat.split = 0.67)
-
-sheetname = 'Custom value inputs - FG'
-leagues = c('FnL','20SD')
-map(leagues, function(l){
-
-  if(l == 'FnL'){
-    df = ottoneu12
-    link = 'https://docs.google.com/spreadsheets/d/1lJAGdHExdjuUx1Fu2ZDXn2uyRmPmd11Hj4gN4rh41KU/'
-  }  else if(l == '20SD'){
-    df = ottoneu20
-    link = 'https://docs.google.com/spreadsheets/d/1Sp_XjplprhI-kyd5qwX3LRyLYCWOLr2Kv-1TRLuYDZo/'
-  }
-
-  out <-  df %>%
-    mutate(Prospect = +(str_sub(fg.id,1,2) == 'sa' & value < 1)) %>%
-    select(name, pos, value, fg.id, ottoneu.id, Prospect, total.pts, `g/ip`, `ppg/ip`) %>%
-    rename(Name = name
-           , Position = pos
-           , Dollars = value
-           , PlayerID = fg.id
-           , 'ottoneu ID' = ottoneu.id)
-
-  googlesheets4::write_sheet(out,link,sheetname)
-
-})

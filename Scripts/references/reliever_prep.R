@@ -1,6 +1,6 @@
 
 # Load Stuff+
-rp.stuffplus_raw <- read_csv(paste0(.rp, 'stuffplus.csv'))
+rp.stuffplus_raw <- read_csv(paste0(.rp, '/stuffplus.csv'))
 
 rp.stuffplus <- rp.stuffplus_raw %>%
   rename_with(tolower) %>%
@@ -12,7 +12,7 @@ rp.stuffplus <- rp.stuffplus_raw %>%
   mutate(playerid = as.character(playerid))
 
 # Load Pitch Mix
-rp.pitchmix_raw <- read_csv(paste0(.rp, 'pitchperc.csv'))
+rp.pitchmix_raw <- read_csv(paste0(.rp, '/pitchperc.csv'))
 
 rp.pitchmix <- rp.pitchmix_raw %>%
   rename_with(tolower) %>%
@@ -24,14 +24,14 @@ rp.pitchmix <- rp.pitchmix_raw %>%
   mutate(playerid = as.character(playerid))
 
 # Load Win Probability
-rp.winprob_raw <- read_csv(paste0(.rp, 'winprobability.csv'))
+rp.winprob_raw <- read_csv(paste0(.rp, '/winprobability.csv'))
 
 rp.winprob <- rp.winprob_raw %>%
   rename_with(tolower) %>%
   mutate(playerid = as.character(playerid))
 
 # Load OOPSY
-rp.oopsy_raw <- read_csv(paste0(.rp, 'oopsy_projection.csv'))
+rp.oopsy_raw <- read_csv(paste0(.rp, '/oopsy_projection.csv'))
 
 rp.oopsy <- rp.oopsy_raw %>%
   rename_with(tolower)  %>%
