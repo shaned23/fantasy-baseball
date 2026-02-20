@@ -2,6 +2,9 @@
 ## Bootstrap
 ## -------------------------
 
+setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
+setwd("..")
+
 source("Scripts/PATHS.R")
 source("Scripts/GLOBALS.R")
 source("Scripts/set_league.R") 
