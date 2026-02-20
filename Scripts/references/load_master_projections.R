@@ -10,6 +10,7 @@ sides <- list('hit','pitch','hit.450','pitch.120')
 
 map(sides, function(x){
   
+  print(x)
   df <- get(paste0(x,'.raw'))
   
   assign(
