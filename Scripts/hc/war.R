@@ -35,7 +35,7 @@ hc.values <- function(league) {
     
     # Find average of available players
     hit.mid <- hit.hc %>%
-      left_join(prior, by = 'fg.id') %>%
+      left_join(filter(prior, side == 'hit'), by = 'fg.id') %>%
       mutate(above.replacement = if_else(is.na(above.replacement),FALSE,above.replacement)) %>%
       filter(above.replacement) %>%
       summarise(across(starts_with('week.'),~mean(., na.rm = TRUE),.names = 'mid.{.col}')
@@ -61,7 +61,7 @@ hc.values <- function(league) {
       select(contains('mid.'))
     
     hit.repl.stats1 <-  hit.hc %>%
-      left_join(prior, by = 'fg.id') %>%
+      left_join(filter(prior, side == 'hit'), by = 'fg.id') %>%
       mutate(above.replacement = if_else(is.na(above.replacement),FALSE,above.replacement)) %>%
       filter(!above.replacement & !is.na(avg)) %>%
       group_by(pos) %>%
@@ -77,7 +77,7 @@ hc.values <- function(league) {
       bind_rows(hit.repl.stats1)
     
     pitch.mid <- pitch.hc %>%
-      left_join(base, by = 'fg.id') %>%
+      left_join(filter(prior, side == 'pitch'), by = 'fg.id') %>%
       mutate(above.replacement = if_else(is.na(above.replacement),FALSE,TRUE)) %>%
       filter(above.replacement) %>%
       summarise(across(starts_with('week.'),mean, .names = 'mid.{.col}')
@@ -109,7 +109,7 @@ hc.values <- function(league) {
     bb9.scale = pitch.mid$summid.bb9 / pitch.mid$mid.bb9
     
     pitch.repl.stats <-  pitch.hc %>%
-      left_join(prior, by = 'fg.id') %>%
+      left_join(filter(prior, side == 'pitch'), by = 'fg.id') %>%
       mutate(above.replacement = if_else(is.na(above.replacement),FALSE,above.replacement)) %>%
       filter(!above.replacement & !is.na(era)) %>%
       group_by(pos) %>%
@@ -267,8 +267,7 @@ hc.values <- function(league) {
       } else {
         print('end')
         hitter.chart <<- hitter.chart %>%
-          select(fg.id,pos,weeks,spg,par,rv) %>%
-          rename(best.pos = pos)
+          select(fg.id,pos,weeks,spg,par,rv)
       }
       
     }
@@ -361,13 +360,14 @@ hc.values <- function(league) {
     
     # Find the list of players abovereplacement
     prior.new <- bind_rows(
-      hitter.chart
-      , pitcher.chart
+      list('hit' = hitter.chart
+      , 'pitch' = pitcher.chart)
+      , .id = 'side'
     ) %>%
       arrange(desc(par)) %>%
       mutate(rank = row_number()
              , above.replacement = par > 0) %>%
-      distinct(fg.id, rank, above.replacement) %>%
+      distinct(fg.id, rank, above.replacement, side) %>%
       filter(!is.na(above.replacement))
     
     if(isTRUE(all.equal(prior %>% distinct(fg.id) %>% arrange(fg.id), 

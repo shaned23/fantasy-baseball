@@ -7,7 +7,7 @@ ab.est = est$ab.est[1]
 ip.est = est$ip.est[1]
 
 # Load projections for first iterations
-hit.base <- read.csv(paste0(.data,'batx_hitting_hc.csv')) %>%
+hit.base <- read.csv(file.path(.data,'batx_hitting_hc.csv')) %>%
   rename_with(tolower) %>%
   rename(fg.id = playerid) %>%
   arrange(desc(dollars)) %>%
@@ -15,7 +15,7 @@ hit.base <- read.csv(paste0(.data,'batx_hitting_hc.csv')) %>%
          , above.replacement = dollars > 0) %>%
   select(fg.id,rank,above.replacement)
 
-pitch.base <- read.csv(paste0(.data,'oopsy_pitching_hc.csv')) %>%
+pitch.base <- read.csv(file.path(.data,'oopsy_pitching_hc.csv')) %>%
   rename_with(tolower) %>%
   rename(fg.id = playerid) %>%
   arrange(desc(dollars)) %>%
@@ -24,13 +24,13 @@ pitch.base <- read.csv(paste0(.data,'oopsy_pitching_hc.csv')) %>%
   select(fg.id,rank,above.replacement)
 
 
-base <- bind_rows(hit.base, pitch.base) %>%
-  group_by(fg.id, above.replacement) %>%
+base <- bind_rows(list(hit = hit.base, pitch = pitch.base), .id = 'side') %>%
+  group_by(fg.id, above.replacement, side) %>%
   summarise(rank = max(rank), .groups = 'drop')
 
 
 # Load ADPs
-raw.FantraxADP <- read.csv(paste0(.data,'Fantrax-Players-HC Baseballers.csv'))
+raw.FantraxADP <- read.csv(file.path(.data,'Fantrax-Players-HC Baseballers.csv'))
 
 adp.hc <- raw.FantraxADP %>%
   rename_with(tolower) %>%
