@@ -1,7 +1,7 @@
 # Load last year stats
-history <- read.xlsx(paste0(.data,'hc_history.xlsx'),'import')
+history <- read.xlsx(file.path(.data,'hc_history.xlsx'),'import')
 
-shanevol <- read.xlsx(paste0(.data,'shane ab ip.xlsx'),'Sheet1')
+shanevol <- read.xlsx(file.path(.data,'shane ab ip.xlsx'),'Sheet1')
 
 # Join together
 df <- left_join(history,shanevol,by = c("team" = "Team", "scoringperiod" = "scoringperiod",'year' = 'year' )) %>% 

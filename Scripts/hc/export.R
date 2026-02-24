@@ -1,6 +1,6 @@
 
   
-link = hc.book
+link = league_info$hc$sheet_link
 WAR = hc.values('HC')
 
 googlesheets4::write_sheet(coef.mat,link,'coefficients')

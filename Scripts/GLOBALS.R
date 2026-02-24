@@ -29,8 +29,10 @@ league_info <- list(
       )
     )
   , hc = list(
-    book = "1MCDdhMBssWlwEvLeR0FEnjmYZpcenSbliGd_lT0eOVA",
-    cats = list(
+        
+      teams = 12
+      , sheet_link = "1jy9PzHz_EuS4zjXkXdeCrpx-EaEyHbAaEgtqHfmItjo"
+    , cats = list(
       all = c("r","hr","rbi","sb","avg","ops","qs","k","svhld","era","hip","bb9"),
       hit = c("r","hr","rbi","sb","avg","ops"),
       pitch = c("qs","k","svhld","era","hip","bb9"),

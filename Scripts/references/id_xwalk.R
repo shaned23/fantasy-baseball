@@ -12,9 +12,7 @@ pitch.names <- read.xlsx(paste0(.proj,'/masterprojections.xlsx'),sheet = 'Pitche
 
 fangraphs <- bind_rows(hit.names, hit.names2, pitch.names) %>%
   rename_with(tolower) %>%
-  rename(fangraphs.id = playerid
-         , name.accents = name
-         , name = nameascii) %>%
+  rename(fangraphs.id = playerid) %>%
   distinct(fangraphs.id, name)
 
 #test <- full_join(fangraphs, fantrax, by = 'name')

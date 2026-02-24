@@ -58,10 +58,10 @@ src("mendoza/export.R")
 ## HC Baseballers
 ## -------------------------
 
-# set_league("hc")
-# 
-# src("hc/last_year_results.R")
-# src("hc/logistic_models.R")
-# src("hc/prep.R")
-# src("hc/war.R")
-# src("hc/export.R")
+set_league("hc")
+
+src("hc/last_year_results.R")
+src("hc/logistic_models.R")
+src("hc/prep.R")
+src("hc/war.R")
+src("hc/export.R")
