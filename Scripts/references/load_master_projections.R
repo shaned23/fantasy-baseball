@@ -25,6 +25,9 @@ map(sides, function(x){
   
 })
 
+names <- bind_rows(hit.proj, pitch.proj) %>%
+  distinct(fg.id, name, team)
+
 # Add the saves to pitch.proj
 # pitch.proj <- pitch.proj %>%
 #   mutate(team = if_else(is.na(team),'MLB',team)

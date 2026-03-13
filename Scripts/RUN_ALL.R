@@ -47,12 +47,12 @@ src("ottoneu/export.R")
 ## Mendoza
 ## -------------------------
 
-set_league("mendoza")
-
-src("mendoza/prep.R")
-src("mendoza/value.R")
-src("mendoza/relievers.R")
-src("mendoza/export.R")
+# set_league("mendoza")
+# 
+# src("mendoza/prep.R")
+# src("mendoza/value.R")
+# src("mendoza/relievers.R")
+# src("mendoza/export.R")
 
 ## -------------------------
 ## HC Baseballers
