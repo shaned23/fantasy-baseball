@@ -12,7 +12,8 @@ df <- left_join(history,shanevol,by = c("team" = "Team", "scoringperiod" = "scor
   # .9 removes the BS in theory
   mutate(svhld = if_else(year == 2022,(svhld/.9) * (1+.2741),svhld)) %>%
   # Adjust SBs
-  mutate(sb = if_else(year == 2022,sb * (1+.2), sb)) 
+  mutate(sb = if_else(year == 2022,sb * (1+.2), sb)) %>%
+  mutate(team = str_trim(team, 'both'))
   
   # Adjust OPS (done very badly in terms of coding etiquette)
   #mutate(ops = ops * (0.773/0.761))

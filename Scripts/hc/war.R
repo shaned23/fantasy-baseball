@@ -379,13 +379,16 @@ hc.values <- function(league) {
         select(hitter.chart, fg.id, pos, weeks, spg, par, rv) %>% mutate(pos = if_else(is.na(pos),'UT',pos))
         , pitcher.chart %>% mutate(pos = if_else(is.na(pos),'P',pos))
       ) %>%
+        group_by(fg.id) %>%
+        summarise(across(c(spg, par, rv), sum)
+                  , weeks = max(weeks)
+                  , pos = paste(pos, collapse = ',')) %>%
         rename(best.pos = pos) %>%
         left_join(adp.hc, by = 'fg.id') %>%
         mutate(pos = if_else(best.pos == 'P','P',pos)) %>%
-        left_join(fangraphs, by = join_by('fg.id' == 'fangraphs.id')) %>%
-        select(fg.id, name, team, pos, best.pos, weeks, spg, rv, par, adp) %>%
+        select(fg.id, player, team, pos, best.pos, weeks, spg, rv, par, adp) %>%
         rename(PlayerID = fg.id
-               , Name = name
+               , Name = player
                , Team = team
                , Position = pos
                , Best = best.pos

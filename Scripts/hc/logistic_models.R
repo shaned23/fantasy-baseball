@@ -36,4 +36,3 @@ map(cats, function(s){
   
 })
 
-write_sheet(coef.mat, league_info$hc$sheet_link, 'coefficients')
